@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #############################################################################
-## Title: parsePileup.py
+## Title: parseMPileup.py
 ## Description: Parse output of samtools mpileup
 ##
 ## Author: Pascal Belleau and Astrid Deschenes

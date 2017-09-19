@@ -58,35 +58,54 @@ def main():
 
 
 def open_read_file(inputfile):
-        """
-        Open reading file and return file pointer.
-        An IOError is raised when the file cannot be opened.
-        """
-        try:    
-            input_file = open(inputfile, 'r')
-        except IOError:                     
-            raise IOError("Cannot open file : %s \n\n" % (inputfile))
-        return(input_file)
+    """
+    Open reading file and return file pointer.
+    An IOError is raised when the file cannot be opened.
+    
+    Keyword arguments:
+    inputfile -- the name of the input file
+    """
+    try:    
+        input_file = open(inputfile, 'r')
+    except IOError:                     
+        raise IOError("Cannot open file : %s \n\n" % (inputfile))
+    return(input_file)
            
 def open_write_file(outputFile):
-        """
-        Open writing file and return file pointer.
-        An IOError is raised when the file cannot be opened.
-        """
-        try:    
-            output_file = open(outputFile, 'w')
-        except IOError:                     
-            raise IOError("Cannot open file : %s \n\n" % (outputFile))
-        return(output_file)
+    """
+    Open writing file and return file pointer.
+    An IOError is raised when the file cannot be opened.
+    
+    Keyword arguments:
+    outputFile -- the name of the output file
+    """
+    try:    
+        output_file = open(outputFile, 'w')
+    except IOError:                     
+        raise IOError("Cannot open file : %s \n\n" % (outputFile))
+    return(output_file)
       
 def extractCigarSeq(sequence, phred, mapq, info):
+    """
+    Open writing file and return file pointer.
+    An IOError is raised when the file cannot be opened.
+        
+    Keyword arguments:
+    sequence -- the read bases aligned at a specific position
+    phred    -- the base qualities for the same position
+    mapq     -- the map qualities for the same position
+    info     -- a dictionary containing the information about the reference base, the position, the chromosome and the number of bases
+    """
+        
     ref = info['ref']
     
+    ## The dictionary that is going to contain all (Phred score, MPAQ) tuple for each base of the sequence
     letters = dict([('A', list()), ('C', list()), ('G', list()), ('T', list()), ('N', list()), ('O', list())])
     lettersKeys = letters.keys()
     
     sequence = sequence.upper()
     
+    ## Offset used to obtain the Phred and MPAQ values
     asciiOffset = 33
     
     positionSeq = 0

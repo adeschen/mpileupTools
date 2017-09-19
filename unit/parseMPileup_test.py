@@ -34,6 +34,21 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['T'] == [(0, 64)])
         self.assertTrue(lettersCount['N'] == [])
         self.assertTrue(lettersCount['O'] == [])
+    
+    def test_extractCigarSeq_ref_and_two_alternative_alleles(self):
+        """Test a cigar sequence that has the reference allele on forward and reverse strand and two alternative alleles"""
+        sequence = ".AG.,"
+        phred = "!F!DG"
+        mapq = "]hacb"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "T"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [(37, 71)])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [(0, 64)])
+        self.assertTrue(lettersCount['T'] == [(0, 60), (35, 66), (38, 65)])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [])
         
 if __name__ == '__main__':
     unittest.main()

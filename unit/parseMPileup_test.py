@@ -65,6 +65,36 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['N'] == [(40, 59)])
         self.assertTrue(lettersCount['O'] == [])
     
-        
+    def test_extractCigarSeq_one_insertion(self):
+        """Test a cigar sequence that has the reference allele and one insertion"""
+        sequence = ".+2AC,"
+        phred = "EI"
+        mapq = "[\\"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "T"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [])
+        self.assertTrue(lettersCount['T'] == [(36, 58), (40, 59)])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1)])
+    
+    def test_extractCigarSeq_two_insertions(self):
+        """Test a cigar sequence that has the reference allele and one insertion"""
+        sequence = ".+2AC+1T,"
+        phred = "EI"
+        mapq = "[K"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "T"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [])
+        self.assertTrue(lettersCount['T'] == [(36, 58), (40, 42)])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1)])
+    
+    
 if __name__ == '__main__':
     unittest.main()

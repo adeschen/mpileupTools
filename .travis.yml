@@ -6,8 +6,12 @@ env:
   global:
      - PYTHONPATH="/home/travis/build/adeschen/mpileupTools"
 
+install:
+  - pip install codecov
+
 script:
   - pytest 
+  - coverage run 
 
 after_success:
   - codecov

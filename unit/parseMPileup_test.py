@@ -140,6 +140,20 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['N'] == [])
         self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1), (-1, -1)])
     
+    def test_extractCigarSeq_start_of_read(self):
+        """Test a cigar sequence that has reference and alternative alleles, indels, end and start of reads"""
+        sequence = "+3CTT-1T$.^D-4ATAT$a"
+        phred = "UB"
+        mapq = "!["
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "C"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [(33, 58)])
+        self.assertTrue(lettersCount['C'] == [(52, 0)])
+        self.assertTrue(lettersCount['G'] == [])
+        self.assertTrue(lettersCount['T'] == [])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1), (-1, -1)])
     
 if __name__ == '__main__':
     unittest.main()

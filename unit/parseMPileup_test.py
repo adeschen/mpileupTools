@@ -81,7 +81,7 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['O'] == [(-1, -1)])
     
     def test_extractCigarSeq_two_insertions(self):
-        """Test a cigar sequence that has the reference allele and one insertion"""
+        """Test a cigar sequence that has the reference allele and two insertions"""
         sequence = ".+2AC+1T,"
         phred = "EI"
         mapq = "[K"
@@ -95,6 +95,35 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['N'] == [])
         self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1)])
     
+    def test_extractCigarSeq_one_deletion(self):
+        """Test a cigar sequence that has the reference allele and one deletion"""
+        sequence = ".-1T,"
+        phred = "TI"
+        mapq = "[H"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "T"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [])
+        self.assertTrue(lettersCount['T'] == [(51, 58), (40, 39)])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1)])
+    
+    def test_extractCigarSeq_two_deletions(self):
+        """Test a cigar sequence that has the reference allele and two deletions"""
+        sequence = ".-1T,-2AT"
+        phred = "QI"
+        mapq = "!E"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "G"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [(48, 0), (40, 36)])
+        self.assertTrue(lettersCount['T'] == [])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1)])
     
 if __name__ == '__main__':
     unittest.main()

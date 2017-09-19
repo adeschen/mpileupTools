@@ -7,7 +7,7 @@ env:
      - PYTHONPATH="/home/travis/build/adeschen/mpileupTools"
 
 script:
-  - pytest --cov=codecov
+  - pytest 
 
 after_success:
   - codecov

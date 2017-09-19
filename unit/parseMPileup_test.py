@@ -125,5 +125,21 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['N'] == [])
         self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1)])
     
+    def test_extractCigarSeq_end_of_read(self):
+        """Test a cigar sequence that has the reference allele and two deletions"""
+        sequence = "+2CT-1T$.-2AT$,"
+        phred = "UT"
+        mapq = "!!"
+        info = dict([('chr', "2"), ('pos', "3423"), ('ref', "G"), ('NB', "4")])
+        lettersCount = extractCigarSeq(sequence, phred, mapq, info)
+        self.assertTrue(len(lettersCount) == 6)
+        self.assertTrue(lettersCount['A'] == [])
+        self.assertTrue(lettersCount['C'] == [])
+        self.assertTrue(lettersCount['G'] == [(52, 0), (51, 0)])
+        self.assertTrue(lettersCount['T'] == [])
+        self.assertTrue(lettersCount['N'] == [])
+        self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1), (-1, -1)])
+    
+    
 if __name__ == '__main__':
     unittest.main()

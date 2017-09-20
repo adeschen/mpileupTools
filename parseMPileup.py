@@ -46,7 +46,7 @@ def extractArguments():
     for opt, arg in opts:
         if opt == "-h":
             print usage
-            sys.exit()
+            sys.exit(0)
         elif opt in ("-i", "--ifile"):
             inputFile = arg
         elif opt in ("-p", "--pfile"):

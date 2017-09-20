@@ -1,5 +1,6 @@
 import unittest
 import sys
+import StringIO
 
 from parseMPileup import extractCigarSeq
 from parseMPileup import extractArguments
@@ -7,6 +8,11 @@ from parseMPileup import extractArguments
 class ParseMPileupTestCase(unittest.TestCase):
     """Tests for `parseMPileup.py`."""
 
+
+    def tearDown(self):
+        """ Reset redirected output to default"""
+        sys.stdout = sys.__stdout__               
+        
     def test_extractCigarSeq_only_ref_allele(self):
         """Test a cigar sequence that has only the reference allele on forward and reverse strand"""
         sequence = ".,,."
@@ -175,6 +181,15 @@ class ParseMPileupTestCase(unittest.TestCase):
         (inputA, outputB) = extractArguments()
         self.assertTrue(inputA == "toto.txt")
         self.assertTrue(outputB == "titi_")
+        
+    def test_extractArguments_help(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        capturedOutput = StringIO.StringIO()      # A StringIO object
+        sys.stdout = capturedOutput               # Redirect stdout
+        sys.argv = ["prog", "-h"]  
+        with self.assertRaises(SystemExit):   
+            extractArguments()
+        self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix>\n")
         
 if __name__ == '__main__':
     unittest.main()

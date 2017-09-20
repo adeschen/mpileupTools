@@ -18,7 +18,7 @@ import getopt
 from re import split
 from re import match
 
-def main():
+def extractArguments():
     """
     Extract argument values as input by user.
 
@@ -198,6 +198,6 @@ def parseMPileup(inputFile, outputPrefix):
 if __name__ == "__main__":
     
     # Extract arguments. Message shown when the number of arguments is not coherent
-    (inputFile, outputPrefix) = main()
+    (inputFile, outputPrefix) = extractArguments()
     # Parsing pileup file
     parseMPileup(inputFile, outputPrefix)

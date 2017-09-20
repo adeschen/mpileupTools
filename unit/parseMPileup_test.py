@@ -1,8 +1,10 @@
 import unittest
+import sys
 
 from parseMPileup import extractCigarSeq
+from parseMPileup import extractArguments
 
-class ExtractCigarSeqTestCase(unittest.TestCase):
+class ParseMPileupTestCase(unittest.TestCase):
     """Tests for `parseMPileup.py`."""
 
     def test_extractCigarSeq_only_ref_allele(self):
@@ -155,5 +157,24 @@ class ExtractCigarSeqTestCase(unittest.TestCase):
         self.assertTrue(lettersCount['N'] == [])
         self.assertTrue(lettersCount['O'] == [(-1, -1), (-1, -1), (-1, -1)])
     
+    def test_extractArguments_wrong_args(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        sys.argv = ["prog", "-d"]
+        with self.assertRaises(SystemExit):
+                extractArguments()
+    
+    def test_extractArguments_missing_arg_value(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        sys.argv = ["prog", "-i"]
+        with self.assertRaises(SystemExit):
+                extractArguments()
+    
+    def test_extractArguments_goods_args(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        sys.argv = ["prog", "-i", "toto.txt", "-p", "titi_"]
+        (inputA, outputB) = extractArguments()
+        self.assertTrue(inputA == "toto.txt")
+        self.assertTrue(outputB == "titi_")
+        
 if __name__ == '__main__':
     unittest.main()

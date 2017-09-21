@@ -1,13 +1,29 @@
 import unittest
 import sys
 import StringIO
+import os
+import re
 
-from parseMPileup import extractCigarSeq
 from parseMPileup import extractArguments
+from parseMPileup import extractCigarSeq
+from parseMPileup import parsePileup
+from tempfile import NamedTemporaryFile
 
 class ParseMPileupTestCase(unittest.TestCase):
     """Tests for `parseMPileup.py`."""
 
+    def createTempPileup01(self):
+        tempFile01 = NamedTemporaryFile(delete=False)
+        #outfile_path = tempfile.mkstemp()[1]
+        #oFile = open(outfile_path, 'w')
+        #$oFile.write("chr1\t3153345\tT\t2\t.,+4atta\t^!\t]]\t100,61\n")
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr1", "3153345", "T", "2", ".,+4atta", "^!", "]]", "100,61"))   
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr1", "3800923", "A", "3", "Tt^!.", "g!6", "]]!", "52,66,1")) 
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr2", "4688598", "G", "3", ".Cc", "Cg!", "]]]", "17,10,11"))
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr4", "5134371", "C", "3", ".-1A,-1a.", "f!C", "]]]", "74,23,7"))
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr5", "6916649", "G", "2", ".$,$", "K!", "$$", "94,101"))
+        tempFile01.close()
+        return(tempFile01.name)
 
     def tearDown(self):
         """ Reset redirected output to default"""
@@ -190,6 +206,29 @@ class ParseMPileupTestCase(unittest.TestCase):
         with self.assertRaises(SystemExit):   
             extractArguments()
         self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix>\n")
+    
+    def test_parseMPileup_01(self):
+        inputfile_path = self.createTempPileup01()
+        try:
+            parsePileup(inputfile_path, "toto")
+            contents = open("toto.txt").read()
+        finally:
+            # NOTE: To retain the tempfile if the test fails, remove
+            # the try-finally clauses
+            if os.path.exists(inputfile_path):
+                os.unlink(inputfile_path)
+            files = [ f for f in os.listdir(".") if re.match(r'toto.*\.txt', f)]
+            for f in files:
+                if os.path.exists(f):
+                    os.unlink(f)
+            
+        expected = "chr1\t3153345\t2\t0\t0\t0\t2\t1\t0\n"
+        expected = expected + "chr1\t3800923\t3\t1\t0\t0\t2\t0\t0\n"
+        expected = expected + "chr2\t4688598\t3\t0\t2\t1\t0\t0\t0\n"
+        expected = expected + "chr4\t5134371\t3\t0\t3\t0\t0\t2\t0\n"
+        expected = expected + "chr5\t6916649\t2\t0\t0\t2\t0\t0\t0\n"
+        self.assertEqual(contents, expected)
+        
         
 if __name__ == '__main__':
     unittest.main()

@@ -151,7 +151,7 @@ def extractCigarSeq(sequence, phred, mapq, info):
     
     return(letters)
     
-def parseMPileup(inputFile, outputPrefix):
+def parsePileup(inputFile, outputPrefix):
     """
     Extract argument values as input by user.
 
@@ -200,4 +200,4 @@ if __name__ == "__main__":
     # Extract arguments. Message shown when the number of arguments is not coherent
     (inputFile, outputPrefix) = extractArguments()
     # Parsing pileup file
-    parseMPileup(inputFile, outputPrefix)
+    parsePileup(inputFile, outputPrefix)

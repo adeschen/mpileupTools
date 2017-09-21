@@ -22,6 +22,7 @@ class ParseMPileupTestCase(unittest.TestCase):
         tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr2", "4688598", "G", "3", ".Cc", "Cg!", "]]]", "17,10,11"))
         tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr4", "5134371", "C", "3", ".-1A,-1a.", "f!C", "]]]", "74,23,7"))
         tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr5", "6916649", "G", "2", ".$,$", "K!", "$$", "94,101"))
+        tempFile01.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("chr6", "37108587", "C", "4", ".,.N", "a!D#", "]]]]", "88,89,52,12"))
         tempFile01.close()
         return(tempFile01.name)
 
@@ -227,6 +228,7 @@ class ParseMPileupTestCase(unittest.TestCase):
         expected = expected + "chr2\t4688598\t3\t0\t2\t1\t0\t0\t0\n"
         expected = expected + "chr4\t5134371\t3\t0\t3\t0\t0\t2\t0\n"
         expected = expected + "chr5\t6916649\t2\t0\t0\t2\t0\t0\t0\n"
+        expected = expected + "chr6\t37108587\t4\t0\t3\t0\t0\t0\t1\n"
         self.assertEqual(contents, expected)
         
         

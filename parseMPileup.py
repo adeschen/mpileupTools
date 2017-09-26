@@ -28,10 +28,15 @@ def extractArguments():
     
     inputFile = ''
     outputPrefix = ''
-    usage = 'usage: parsePileup.py -i <inputFile> -p <outputPrefix>'
+    usage = 'usage: parsePileup.py -i <inputFile> -p <outputPrefix> [-s] [-h]'
     
+    ## Valid arguments are:
+    ## -i or --ifile for the input file
+    ## -p or --pfile for the prefix of the output file
+    ## -s for the creation of separated files
+    ## -h for help
     try:
-        opts, arg = getopt.getopt(sys.argv[1:], "hi:p:", ["help", "ifile=", "pfile="])
+        opts, arg = getopt.getopt(sys.argv[1:], "hi:p:s", ["help", "ifile=", "pfile="])
     except getopt.GetoptError:
         print usage
         sys.exit(2)
@@ -42,19 +47,22 @@ def extractArguments():
     if len(opts) == 0:
         print usage
         sys.exit(2)
-           
+    
+    separatedFiles = False
     for opt, arg in opts:
-        if opt == "-h":
+        if opt in ("-h", "help"):
             print usage
             sys.exit(0)
         elif opt in ("-i", "--ifile"):
             inputFile = arg
         elif opt in ("-p", "--pfile"):
             outputPrefix = arg
+        elif opt in ("-s"):
+            separatedFiles = True
          
     print 'Input file is "', inputFile, '"'
     print 'Output prefix file is "', outputPrefix, '"'
-    return(inputFile, outputPrefix)
+    return(inputFile, outputPrefix, separatedFiles)
 
 
 def open_read_file(inputfile):

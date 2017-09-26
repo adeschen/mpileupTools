@@ -195,9 +195,27 @@ class ParseMPileupTestCase(unittest.TestCase):
     def test_extractArguments_goods_args(self):
         """Test extraction of arguments when undefined argument passed to function"""
         sys.argv = ["prog", "-i", "toto.txt", "-p", "titi_"]
-        (inputA, outputB) = extractArguments()
+        (inputA, outputB, separatedFiles) = extractArguments()
         self.assertTrue(inputA == "toto.txt")
         self.assertTrue(outputB == "titi_")
+        self.assertFalse(separatedFiles, "test_extractArguments_goods_args: The separatedFiles argument doesn't have the expected value.")
+    
+    def test_extractArguments_with_s_arg(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        sys.argv = ["prog", "-i", "effect.txt", "-p", "oneTest_", "-s"]
+        (inputA, outputB, separatedFiles) = extractArguments()
+        self.assertTrue(inputA == "effect.txt")
+        self.assertTrue(outputB == "oneTest_")
+        self.assertTrue(separatedFiles, "test_extractArguments_with_s_arg: The separatedFiles argument doesn't have the expected value.")
+    
+    def test_extractArguments_with_upper_s_arg(self):
+        """Test extraction of arguments when undefined argument passed to function"""
+        capturedOutput = StringIO.StringIO()      # A StringIO object
+        sys.stdout = capturedOutput               # Redirect stdout
+        sys.argv = ["prog", "-p", "test_", "-i", "where.txt", "-S"]
+        with self.assertRaises(SystemExit):
+            extractArguments()
+        self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix> [-s] [-h]\n")
         
     def test_extractArguments_help(self):
         """Test extraction of arguments when undefined argument passed to function"""
@@ -206,7 +224,7 @@ class ParseMPileupTestCase(unittest.TestCase):
         sys.argv = ["prog", "-h"]  
         with self.assertRaises(SystemExit):   
             extractArguments()
-        self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix>\n")
+        self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix> [-s] [-h]\n")
     
     def test_parseMPileup_01(self):
         inputfile_path = self.createTempPileup01()

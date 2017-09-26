@@ -226,6 +226,15 @@ class ParseMPileupTestCase(unittest.TestCase):
             extractArguments()
         self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix> [-s] [-h]\n")
     
+    def test_extractArguments_no_arg(self):
+        """Test extraction of arguments when no argument passed to function"""
+        capturedOutput = StringIO.StringIO()      # A StringIO object
+        sys.stdout = capturedOutput               # Redirect stdout
+        sys.argv = ["prog"]  
+        with self.assertRaises(SystemExit):   
+            extractArguments()
+        self.assertEqual(capturedOutput.getvalue(), "usage: parsePileup.py -i <inputFile> -p <outputPrefix> [-s] [-h]\n")
+    
     def test_parseMPileup_01(self):
         inputfile_path = self.createTempPileup01()
         try:

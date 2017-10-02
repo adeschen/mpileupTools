@@ -188,7 +188,7 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
             oExtraFile[str(phred) + str(mapq)] = open_write_file(outputPrefix + "_" + str(phred) + "_" + str(mapq) + ".txt")
             if not separatedFiles:
                 ## Header only present when files are not separated
-                oExtraFile[str(phred) + str(mapq)].write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n")
+                oExtraFile[str(phred) + str(mapq)].write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\n")
         
     for line in iFile:
         data = split("\t", line)

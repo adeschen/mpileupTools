@@ -249,8 +249,9 @@ class ParseMPileupTestCase(unittest.TestCase):
             for f in files:
                 if os.path.exists(f):
                     os.unlink(f)
-            
-        expected = "chr1\t3153345\t2\t0\t0\t0\t2\t1\t0\n"
+        
+        expected = "Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n"
+        expected = expected + "chr1\t3153345\t2\t0\t0\t0\t2\t1\t0\n"
         expected = expected + "chr1\t3800923\t3\t1\t0\t0\t2\t0\t0\n"
         expected = expected + "chr2\t4688598\t3\t0\t2\t1\t0\t0\t0\n"
         expected = expected + "chr4\t5134371\t3\t0\t3\t0\t0\t2\t0\n"

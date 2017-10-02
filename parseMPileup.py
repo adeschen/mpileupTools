@@ -159,42 +159,60 @@ def extractCigarSeq(sequence, phred, mapq, info):
     
     return(letters)
     
-def parsePileup(inputFile, outputPrefix):
+def parsePileup(inputFile, outputPrefix, separatedFiles):
     """
     Extract argument values as input by user.
 
     Keyword arguments:
     inputFile -- the name of the input file
     outputPrefix -- the prefix of the output files
+    separatedFiles -- an boolean indicating if the position file should be created separately
     """
     
+    ## Open input file
     iFile = open_read_file(inputFile)
+    
+    ## Open global output file
     oFile = open_write_file(outputPrefix + ".txt")
+    
+    if not separatedFiles:
+        ## Write header when no separated file is created
+        oFile.write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n")
+    else:
+        ## Open separated file to contain information about position
+        posFile = open_write_file(outputPrefix + "_pos.txt")
     
     oExtraFile = dict()
     for phred in (15, 20, 30, 25):
         for mapq in (0, 1, 5, 10):
             oExtraFile[str(phred) + str(mapq)] = open_write_file(outputPrefix + "_" + str(phred) + "_" + str(mapq) + ".txt")
-    
+            if not separatedFiles:
+                ## Header only present when files are not separated
+                oExtraFile[str(phred) + str(mapq)].write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n")
+        
     for line in iFile:
         data = split("\t", line)
-        
         info = dict([('chr', data[0]), ('pos', data[1]), ('ref', data[2]), ('NB', data[3])])
-
         lettersCount = extractCigarSeq(data[4], data[5], data[6], info);
         
-        ## Write information will all aligned data
-        oFile.write("%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n" % (info['chr'], info['pos'], info['NB'], len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
-
+        ## Write information for all based aligned
+        if not separatedFiles:
+            oFile.write("%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n" % (info['chr'], info['pos'], info['NB'], len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
+        else:
+            posFile.write("%s\t%s\t%s\n" % (info['chr'], info['pos'], info['NB']))
+            oFile.write("%d\t%d\t%d\t%d\t%d\t%d\n" % (len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
+       
         for phred in (15, 20, 30, 25):
             for mapq in (0, 1, 5, 10):
-                outputF = oExtraFile[str(phred) + str(mapq)] 
-                outputF.write("%s\t%s\t%s" % (info['chr'], info['pos'], info['NB']))
+                outputF = oExtraFile[str(phred) + str(mapq) ] 
+                if not separatedFiles:
+                    outputF.write("%s\t%s\t%s" % (info['chr'], info['pos'], info['NB']))
+                newCount = dict()
                 for letterNow in ('A', 'C', 'G', 'T'):
-                    lenLetter = len(filter(lambda g: g[0] < phred and g[1] < mapq, lettersCount[letterNow]))
-                    outputF.write("\t%d" % (lenLetter))
-                outputF.write("\n")
+                    newCount[letterNow] = len(filter(lambda g: g[0] < phred and g[1] < mapq, lettersCount[letterNow]))
+                outputF.write("%d\t%d\t%d\t%d\n" % (newCount['A'], newCount['C'], newCount['G'], newCount['T']))
     
+    ## Close all files
     for phred in (15, 20, 30, 25):
         for mapq in (0, 1, 5, 10):
             outputF = oExtraFile[str(phred) + str(mapq)]
@@ -203,9 +221,12 @@ def parsePileup(inputFile, outputPrefix):
     oFile.close()
     iFile.close()
     
+    if separatedFiles:
+        posFile.close()
+    
 if __name__ == "__main__":
     
     # Extract arguments. Message shown when the number of arguments is not coherent
-    (inputFile, outputPrefix) = extractArguments()
+    (inputFile, outputPrefix, separatedFiles) = extractArguments()
     # Parsing pileup file
-    parsePileup(inputFile, outputPrefix)
+    parsePileup(inputFile, outputPrefix, separatedFiles)

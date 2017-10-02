@@ -238,7 +238,7 @@ class ParseMPileupTestCase(unittest.TestCase):
     def test_parseMPileup_01(self):
         inputfile_path = self.createTempPileup01()
         try:
-            parsePileup(inputfile_path, "toto")
+            parsePileup(inputfile_path, "toto", False)
             contents = open("toto.txt").read()
         finally:
             # NOTE: To retain the tempfile if the test fails, remove

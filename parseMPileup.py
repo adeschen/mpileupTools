@@ -147,6 +147,10 @@ def extractCigarSeq(sequence, phred, mapq, info):
             positionSeq += 1
             ## Not change in positionPhred because there is not Phred value for the end of a sequence
             ## Not change in positionMapq because there is not Mapq value for the end of a sequence
+        elif currentData == "*":
+            positionSeq += 1
+            ## Not change in positionPhred because there is not Phred value for the shadow of a deletion
+            ## Not change in positionMapq because there is not Mapq value for the shadow of a deletion
         elif currentData == "^":
             ## The beginning is composed of 2 characters : "^" followed by the Mapq value
             positionSeq += 2
@@ -204,7 +208,7 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
        
         for phred in (15, 20, 30, 25):
             for mapq in (0, 1, 5, 10):
-                outputF = oExtraFile[str(phred) + str(mapq) ] 
+                outputF = oExtraFile[str(phred) + str(mapq)] 
                 if not separatedFiles:
                     outputF.write("%s\t%s\t" % (info['chr'], info['pos']))
                 newCount = dict()

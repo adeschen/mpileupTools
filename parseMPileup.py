@@ -177,7 +177,7 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
     
     if not separatedFiles:
         ## Write header when no separated file is created
-        oFile.write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n")
+        oFile.write("Chromosome\tPosition\tA\tC\tG\tT\tOther\tN\n")
     else:
         ## Open separated file to contain information about position
         posFile = open_write_file(outputPrefix + "_pos.txt")
@@ -188,7 +188,7 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
             oExtraFile[str(phred) + str(mapq)] = open_write_file(outputPrefix + "_" + str(phred) + "_" + str(mapq) + ".txt")
             if not separatedFiles:
                 ## Header only present when files are not separated
-                oExtraFile[str(phred) + str(mapq)].write("Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\n")
+                oExtraFile[str(phred) + str(mapq)].write("Chromosome\tPosition\tA\tC\tG\tT\n")
         
     for line in iFile:
         data = split("\t", line)
@@ -197,9 +197,9 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
         
         ## Write information for all based aligned
         if not separatedFiles:
-            oFile.write("%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n" % (info['chr'], info['pos'], info['NB'], len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
+            oFile.write("%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n" % (info['chr'], info['pos'], len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
         else:
-            posFile.write("%s\t%s\t%s\n" % (info['chr'], info['pos'], info['NB']))
+            posFile.write("%s\t%s\n" % (info['chr'], info['pos']))
             oFile.write("%d\t%d\t%d\t%d\t%d\t%d\n" % (len(lettersCount['A']), len(lettersCount['C']), len(lettersCount['G']), len(lettersCount['T']), len(lettersCount['O']), len(lettersCount['N'])))
        
         for phred in (15, 20, 30, 25):

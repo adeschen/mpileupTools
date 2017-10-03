@@ -250,13 +250,13 @@ class ParseMPileupTestCase(unittest.TestCase):
                 if os.path.exists(f):
                     os.unlink(f)
         
-        expected = "Chromosome\tPosition\tNumberOfBases\tA\tC\tG\tT\tOther\tN\n"
-        expected = expected + "chr1\t3153345\t2\t0\t0\t0\t2\t1\t0\n"
-        expected = expected + "chr1\t3800923\t3\t1\t0\t0\t2\t0\t0\n"
-        expected = expected + "chr2\t4688598\t3\t0\t2\t1\t0\t0\t0\n"
-        expected = expected + "chr4\t5134371\t3\t0\t3\t0\t0\t2\t0\n"
-        expected = expected + "chr5\t6916649\t2\t0\t0\t2\t0\t0\t0\n"
-        expected = expected + "chr6\t37108587\t4\t0\t3\t0\t0\t0\t1\n"
+        expected = "Chromosome\tPosition\tA\tC\tG\tT\tOther\tN\n"
+        expected = expected + "chr1\t3153345\t0\t0\t0\t2\t1\t0\n"
+        expected = expected + "chr1\t3800923\t1\t0\t0\t2\t0\t0\n"
+        expected = expected + "chr2\t4688598\t0\t2\t1\t0\t0\t0\n"
+        expected = expected + "chr4\t5134371\t0\t3\t0\t0\t2\t0\n"
+        expected = expected + "chr5\t6916649\t0\t0\t2\t0\t0\t0\n"
+        expected = expected + "chr6\t37108587\t0\t3\t0\t0\t0\t1\n"
         self.assertEqual(contents, expected)
         
         

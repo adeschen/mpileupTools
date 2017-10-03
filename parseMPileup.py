@@ -206,7 +206,7 @@ def parsePileup(inputFile, outputPrefix, separatedFiles):
             for mapq in (0, 1, 5, 10):
                 outputF = oExtraFile[str(phred) + str(mapq) ] 
                 if not separatedFiles:
-                    outputF.write("%s\t%s\t%s" % (info['chr'], info['pos'], info['NB']))
+                    outputF.write("%s\t%s\t" % (info['chr'], info['pos']))
                 newCount = dict()
                 for letterNow in ('A', 'C', 'G', 'T'):
                     newCount[letterNow] = len(filter(lambda g: g[0] < phred and g[1] < mapq, lettersCount[letterNow]))

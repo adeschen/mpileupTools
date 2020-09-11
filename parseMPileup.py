@@ -143,6 +143,13 @@ def extractCigarSeq(sequence, phred, mapq, info):
             positionSeq = positionSeq + 1 + len(indelLength) + int(indelLength)
             ## Not change in positionPhred because there is not Phred value for an indel
             ## Not change in positionMapq because there is not Mapq value for an indel
+        elif currentData == ">" or currentData == "<":
+            ## Reference skip (CIGAR "N")
+            ## Phred value available but skipped
+            ## Mapq value available but skipped :wq
+            positionSeq += 1
+            positionPhred += 1
+            positionMapq += 1
         elif currentData == "$":
             positionSeq += 1
             ## Not change in positionPhred because there is not Phred value for the end of a sequence

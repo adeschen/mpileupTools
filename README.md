@@ -6,6 +6,8 @@ mpileupTools
 
 This program parses a mpileup file to extract the coverage of each base at each position. 
 
+**Beware that at the moment, the script only works with python 2.**
+
 ## Usage 
 
 python parseMPileup.py  -i <inputFile> -p <outputPrefix> [-s] [-h]

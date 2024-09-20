@@ -17,3 +17,6 @@ python parseMPileup.py  -i <inputFile> -p <outputPrefix> [-s] [-h]
 * -s = When True, the position file in created in a separated file
 * -h = Help
 
+## Authors
+
+Pascal Belleau and Astrid Deschênes
